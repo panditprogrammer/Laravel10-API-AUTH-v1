@@ -28,15 +28,23 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            "name"=> "required|string",
+            "email"=>"required|email|unique:students",
+            "password"=>"required|min:4"
+        ]);
+
+        // return $request->all();
+
+        return student::create($request->all());
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(student $student)
+    public function show($id)
     {
-        //
+        return student::find($id);
     }
 
     /**
@@ -50,16 +58,23 @@ class StudentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, student $student)
+    public function update(Request $request, $id)
     {
-        //
+        $student = student::find($id);
+        $request->validate([
+            "name"=> "required|string",
+            "email"=>"required|email",
+            "password"=>"required|min:4"
+        ]);
+        return $student->update($request->all());
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(student $student)
+    public function destroy($id)
     {
-        //
+        $student = student::find($id);
+        return $student->delete($id);
     }
 }
