@@ -39,13 +39,12 @@ Route::middleware(["auth:sanctum"])->group(function(){
 
 
 // User routes 
-Route::post("/register",[UserController::class,"register"]);
-Route::post("/login",[UserController::class,"login"]);
-Route::post("/login",[UserController::class,"login"]);
+Route::post("/user/register",[UserController::class,"register"]);
+Route::post("/user/login",[UserController::class,"login"]);
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware('auth:sanctum')->post('/logout',[UserController::class,"logout"]);
+Route::middleware('auth:sanctum')->post('/user/logout',[UserController::class,"logout"]);

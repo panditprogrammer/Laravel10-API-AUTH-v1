@@ -31,12 +31,12 @@ class StudentController extends Controller
         $request->validate([
             "name"=> "required|string",
             "email"=>"required|email|unique:students",
-            "password"=>"required|min:4"
+            "address"=>"required|min:6"
         ]);
 
         // return $request->all();
 
-        return student::create($request->all());
+        return student::create(["name"=>$request->name,"email"=>$request->email,"address"=>$request->address]);
     }
 
     /**
@@ -64,7 +64,7 @@ class StudentController extends Controller
         $request->validate([
             "name"=> "required|string",
             "email"=>"required|email",
-            "password"=>"required|min:4"
+            "address"=>"required|min:6"
         ]);
         return $student->update($request->all());
     }

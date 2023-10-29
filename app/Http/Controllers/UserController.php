@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -36,14 +37,36 @@ class UserController extends Controller
     }
 
     // login an existing user 
-    public function login(Request $request){
+    public function login(Request $request)
+    {
 
+        $request->validate([
+            "email" => "required|email",
+            "password" => "required"
+        ]);
+
+
+        $user = User::where("email", $request->email)->first();
+
+        if ($user && Hash::check($request->password, $user->password)) {
+
+            $userCreateToken = "userToken";
+            $token = $user->createToken($userCreateToken)->plainTextToken;
+
+            return response([
+                "user" => $user,
+                "token" => $token
+            ], 201);
+        }
+
+        return response(["message" => "Invalid username or password!"],401);
     }
 
 
     // logout authenticate user 
-    public function logout(Request $request){
+    public function logout(Request $request)
+    {
         $request->user()->currentAccessToken()->delete();
-        return response(["message"=>"You have been logged out!"]);
+        return response(["message" => "You have been logged out!"]);
     }
 }
